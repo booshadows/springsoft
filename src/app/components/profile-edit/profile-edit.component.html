@@ -1,0 +1,66 @@
+<div class="container">
+    <mat-card class="profile-card" appearance="outlined">
+      <mat-card-header>
+        <h2 class="profile-title">Edit Profile</h2>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <div class="profile-image-section">
+          <div class="image-upload-container" [class.has-image]="imageUrl">
+            <img *ngIf="imageUrl" [src]="imageUrl" alt="Profile picture" class="preview-image">
+            <div *ngIf="!imageUrl" class="upload-placeholder">
+              <mat-icon>add_a_photo</mat-icon>
+              <span>Add Photo</span>
+            </div>
+            <input type="file" 
+                   #fileInput 
+                   hidden 
+                   accept="image/*"
+                   (change)="onFileSelected($event)">
+            <button mat-mini-fab 
+                    class="change-photo-button"
+                    (click)="fileInput.click()">
+              <mat-icon>{{ imageUrl ? 'edit' : 'add' }}</mat-icon>
+            </button>
+          </div>
+        </div>
+  
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input matInput placeholder="">
+            <mat-icon matSuffix>person</mat-icon>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input matInput placeholder="">
+            <mat-icon matSuffix>person</mat-icon>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="" type="email">
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input matInput placeholder="" type="tel">
+            <mat-icon matSuffix>phone</mat-icon>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+  
+      <mat-card-actions>
+        <button mat-stroked-button class="cancel-button">
+          <mat-icon>close</mat-icon>
+          Cancel
+        </button>
+        <button mat-flat-button class="save-button">
+          <mat-icon>check</mat-icon>
+          Save
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>

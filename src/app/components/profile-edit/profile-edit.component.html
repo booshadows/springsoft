@@ -12,55 +12,57 @@
               <mat-icon>add_a_photo</mat-icon>
               <span>Add Photo</span>
             </div>
-            <input type="file" 
-                   #fileInput 
-                   hidden 
-                   accept="image/*"
-                   (change)="onFileSelected($event)">
-            <button mat-mini-fab 
-                    class="change-photo-button"
-                    (click)="fileInput.click()">
+            <input type="file" #fileInput hidden accept="image/*" (change)="onFileSelected($event)">
+            <button mat-mini-fab class="change-photo-button" (click)="fileInput.click()">
               <mat-icon>{{ imageUrl ? 'edit' : 'add' }}</mat-icon>
             </button>
           </div>
         </div>
   
-        <div class="form-grid">
+        <form [formGroup]="profileForm" class="form-grid">
           <mat-form-field appearance="outline">
             <mat-label>First Name</mat-label>
-            <input matInput placeholder="">
+            <input matInput formControlName="firstName" placeholder="">
             <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched">
+              First Name is required.
+            </mat-error>
           </mat-form-field>
   
           <mat-form-field appearance="outline">
             <mat-label>Last Name</mat-label>
-            <input matInput placeholder="">
+            <input matInput formControlName="lastName" placeholder="">
             <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched">
+              Last Name is required.
+            </mat-error>
           </mat-form-field>
   
           <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput placeholder="" type="email">
+            <input matInput formControlName="email" placeholder="" type="email">
             <mat-icon matSuffix>email</mat-icon>
+            <mat-error *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+              A valid email is required.
+            </mat-error>
           </mat-form-field>
   
           <mat-form-field appearance="outline">
             <mat-label>Phone Number</mat-label>
-            <input matInput placeholder="" type="tel">
+            <input matInput formControlName="phone" placeholder="" type="tel">
             <mat-icon matSuffix>phone</mat-icon>
           </mat-form-field>
-        </div>
+        </form>
       </mat-card-content>
   
       <mat-card-actions>
-        <button mat-stroked-button class="cancel-button">
-          <mat-icon>close</mat-icon>
-          Cancel
+        <button mat-stroked-button type="button" class="cancel-button">
+          <mat-icon>close</mat-icon> Cancel
         </button>
-        <button mat-flat-button class="save-button">
-          <mat-icon>check</mat-icon>
-          Save
+        <button (click)="onSubmit()" mat-flat-button color="primary" type="submit" class="save-button">
+          <mat-icon>check</mat-icon> Save
         </button>
       </mat-card-actions>
     </mat-card>
   </div>
+  

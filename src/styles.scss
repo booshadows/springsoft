@@ -58,6 +58,15 @@ html {
   .mdc-text-field--focused .mdc-notched-outline > * {
     border-color: #8A817C !important;
   }
+
+  //snackbar
+  .mat-mdc-snack-bar-container .mat-mdc-snackbar-surface {
+    background-color: #463F3A;
+    font-family: "Roboto Mono", sans-serif;
+    .mat-mdc-button:not(:disabled) {
+      color: #fff;
+    }
+  }
 }
 
 html {

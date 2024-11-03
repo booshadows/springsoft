@@ -8,6 +8,9 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserProfile, UserProfileService } from '../../service/userprofile.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-profile-edit',
@@ -19,7 +22,9 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
     MatCardModule, 
     MatIconModule, 
     MatButtonModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule,
+    NgxSpinnerModule,
+    MatSnackBarModule],
   templateUrl: './profile-edit.component.html',
   styleUrl: './profile-edit.component.scss',
 })
@@ -30,7 +35,10 @@ export class ProfileEditComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private userProfileService: UserProfileService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private spinner: NgxSpinnerService,
+    private snackBar: MatSnackBar
+
   ) {
     this.initForm();
   }
@@ -74,6 +82,7 @@ export class ProfileEditComponent implements OnInit {
 
   onSubmit() {
     if (this.profileForm.valid) {
+      this.spinner.show();
       const updatedProfile: UserProfile = {
         id: this.userId,
         ...this.profileForm.value,
@@ -82,10 +91,20 @@ export class ProfileEditComponent implements OnInit {
       console.log(updatedProfile)
       this.userProfileService.updateUserProfile(updatedProfile).subscribe(
         (response) => {
-          console.log('Profile updated successfully:', response);
+          //hide spinner and show snackbar
+          this.spinner.hide();
+          this.snackBar.open('Profile updated successfully!', 'x', {
+            duration: 3000,
+            verticalPosition: 'bottom',
+          });
         },
         (error) => {
-          console.error('Error updating profile:', error);
+          //hide spinner and show snackbar
+          this.spinner.hide();
+          this.snackBar.open('Failed to update profile. Please try again.', 'x', {
+            duration: 3000,
+            verticalPosition: 'bottom',
+          });
         }
       );
     }

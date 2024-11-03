@@ -30,7 +30,10 @@
                 "output": "./assets"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "node_modules/ngx-spinner/animations/ball-spin-clockwise.css",
+              "src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {

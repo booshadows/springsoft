@@ -1,0 +1,39 @@
+$primary-dark: #463F3A;
+$primary-medium: #8A817C;
+$primary-light: #BCB8B1; 
+$background: #F4F3EE; 
+$accent: #E0AFA0;   
+
+.cancel-button {
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 24px;
+    color: $primary-dark;
+    border: 1px solid $primary-light;
+    background-color: white;
+    
+    &:hover {
+      background-color: $background;
+      border-color: $primary-medium;
+    }
+
+    mat-icon {
+      margin-right: 0.5rem;
+    }
+  }
+
+  .save-button {
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 24px;
+    background-color: $primary-dark;
+    color: white;
+    
+    &:hover {
+      background-color: darken($primary-dark, 5%);
+    }
+    
+    mat-icon {
+      margin-right: 0.5rem;
+    }
+  }

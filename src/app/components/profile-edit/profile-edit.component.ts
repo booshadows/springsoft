@@ -7,9 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserProfile, UserProfileService } from '../../service/userprofile.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { NgxSpinnerModule, NgxSpinnerService } from "ngx-spinner";
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 
 @Component({
@@ -24,7 +28,8 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
     MatButtonModule,
     ReactiveFormsModule,
     NgxSpinnerModule,
-    MatSnackBarModule],
+    MatSnackBarModule,
+    MatDialogModule],
   templateUrl: './profile-edit.component.html',
   styleUrl: './profile-edit.component.scss',
 })
@@ -32,12 +37,16 @@ export class ProfileEditComponent implements OnInit {
   imageUrl: string | null | undefined;
   profileForm!: FormGroup;
   userId: string | number | undefined;
+  private destroy$ = new Subject<void>();
+  hasUnsavedChanges = false;
 
   constructor(private fb: FormBuilder,
     private userProfileService: UserProfileService,
     private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private router: Router
 
   ) {
     this.initForm();
@@ -54,9 +63,15 @@ export class ProfileEditComponent implements OnInit {
         console.log(data);
         this.profileForm.patchValue(data);
         this.imageUrl = data.image;
+        this.setupFormChangeDetection();
       });
     }
   });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
    initForm(): void {
@@ -77,6 +92,37 @@ export class ProfileEditComponent implements OnInit {
         console.log(file)
       };
       reader.readAsDataURL(file);
+    }
+  }
+
+   setupFormChangeDetection(): void {
+    console.log(this.hasUnsavedChanges)
+    this.profileForm.valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      console.log(this.hasUnsavedChanges)
+      this.hasUnsavedChanges = true;
+      console.log(this.hasUnsavedChanges)
+    });
+  }
+
+  onCancel(): void {
+    //open confirmation dialog if form is touched
+    if (this.hasUnsavedChanges) {
+      const confirmDialog = this.dialog.open(ConfirmationDialogComponent, {
+        data: { message: 'You have unsaved changes. Are you sure you want to leave?' }
+      });
+
+      confirmDialog.afterClosed().pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(result => {
+        console.log(result)
+        if (result) {
+          this.router.navigate(['/profile', this.userId]);
+        }
+      });
+    } else {
+      this.router.navigate(['/profile', this.userId]);
     }
   }
 

@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserProfileService } from '../../service/userprofile.service';
+import { UserProfile, UserProfileService } from '../../service/userprofile.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
@@ -26,6 +26,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 export class ProfileEditComponent implements OnInit {
   imageUrl: string | null | undefined;
   profileForm!: FormGroup;
+  userId: string | undefined;
 
   constructor(private fb: FormBuilder,
     private userProfileService: UserProfileService,
@@ -39,6 +40,7 @@ export class ProfileEditComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
     const userId = params.get('id');
     if(userId) {
+      this.userId = userId;
       //get user details
       this.userProfileService.getUserProfile(userId).subscribe(data => {
         console.log(data);
@@ -54,8 +56,7 @@ export class ProfileEditComponent implements OnInit {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      phone: [''],
-      profilePicture: [null]
+      phone: ['']
     });
   }
 
@@ -72,6 +73,21 @@ export class ProfileEditComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.profileForm.value);
+    if (this.profileForm.valid) {
+      const updatedProfile: UserProfile = {
+        id: this.userId,
+        ...this.profileForm.value,
+        image: this.imageUrl
+      };
+      console.log(updatedProfile)
+      this.userProfileService.updateUserProfile(updatedProfile).subscribe(
+        (response) => {
+          console.log('Profile updated successfully:', response);
+        },
+        (error) => {
+          console.error('Error updating profile:', error);
+        }
+      );
+    }
   }
 }

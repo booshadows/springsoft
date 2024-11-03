@@ -1,4 +1,4 @@
-@use "@angular/material" as mat;
+@use "@angular/material"as mat;
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:ital,wght@0,300;1,500&display=swap');
@@ -6,18 +6,13 @@
 // Include the common styles for Angular Material
 @include mat.core();
 
-$springSoft-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: light,
+$springSoft-theme: mat.define-theme((color: (theme-type: light,
       primary: mat.$azure-palette,
       tertiary: mat.$blue-palette,
     ),
-    density: (
-      scale: 0,
+    density: (scale: 0,
     ),
-  )
-);
+  ));
 
 :root {
   @include mat.all-component-themes($springSoft-theme);
@@ -55,14 +50,17 @@ html {
   }
 
   /* Border */
-  .mdc-text-field--focused .mdc-notched-outline > * {
-    border-color: #8A817C !important;
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+    border-color: rgba(0, 0, 0, 0.3);
   }
 
   //snackbar
   .mat-mdc-snack-bar-container .mat-mdc-snackbar-surface {
     background-color: #463F3A;
     font-family: "Roboto Mono", sans-serif;
+
     .mat-mdc-button:not(:disabled) {
       color: #fff;
     }

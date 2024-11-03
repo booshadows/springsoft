@@ -31,7 +31,7 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 export class ProfileEditComponent implements OnInit {
   imageUrl: string | null | undefined;
   profileForm!: FormGroup;
-  userId: string | undefined;
+  userId: string | number | undefined;
 
   constructor(private fb: FormBuilder,
     private userProfileService: UserProfileService,
